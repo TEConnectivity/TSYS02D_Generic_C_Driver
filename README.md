@@ -1,5 +1,5 @@
 # TSYS02D Generic C Driver
-Arduino library for the [TSYS02D sensor](http://www.te.com/usa-en/product-G-NIMO-003.html)
+Generic C driver for the [TSYS02D sensor](http://www.te.com/usa-en/product-G-NIMO-003.html)
 
 ![tsys02d](http://www.te.com/content/dam/te-com/catalog/part/0GN/IMO/003/G-NIMO-003-t1.jpg/jcr:content/renditions/product-details.png)
 
