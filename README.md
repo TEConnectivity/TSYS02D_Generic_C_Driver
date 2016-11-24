@@ -23,3 +23,6 @@ The TSYS02D sensor is a self-contained temperature sensor that is  fully calibra
 * Select I2C master mode
 * Read serial number
 * Temperature measurement
+
+
+**NB:** This driver is intended to provide an implementation example of the sensor communication protocol, in order to be usable you have to implement a proper I2C layer for your target platform.
