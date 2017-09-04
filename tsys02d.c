@@ -74,11 +74,9 @@ extern "C" {
 // TSYS02D User Register masks and bit position
 #define TSYS02D_USER_REG_RESOLUTION_MASK					0x81
 #define TSYS02D_USER_REG_END_OF_BATTERY_MASK				0x40
-#define TSYS02D_USER_REG_ENABLE_ONCHIP_HEATER_MASK			0x4
 #define TSYS02D_USER_REG_DISABLE_OTP_RELOAD_MASK			0x2
 #define TSYS02D_USER_REG_RESERVED_MASK                      (~(		TSYS02D_USER_REG_RESOLUTION_MASK			\
 																|	TSYS02D_USER_REG_END_OF_BATTERY_MASK		\
-																|	TSYS02D_USER_REG_ENABLE_ONCHIP_HEATER_MASK	\
 																|	TSYS02D_USER_REG_DISABLE_OTP_RELOAD_MASK ))
 // HTU User Register values
 // Resolution
@@ -89,9 +87,6 @@ extern "C" {
 // End of battery status
 #define TSYS02D_USER_REG_END_OF_BATTERY_VDD_ABOVE_2_25V		0x00
 #define TSYS02D_USER_REG_END_OF_BATTERY_VDD_BELOW_2_25V		0x40
-// Enable on chip heater
-#define TSYS02D_USER_REG_ONCHIP_HEATER_ENABLE				0x04
-#define TSYS02D_USER_REG_OTP_RELOAD_DISABLE					0x02
 
 static struct i2c_master_module dev_inst_tsys02d;
 uint32_t tsys02d_conversion_time = TSYS02D_CONVERSION_TIME_T_14b;
@@ -599,86 +594,6 @@ enum tsys02d_status tsys02d_get_battery_status(enum tsys02d_battery_status *bat)
 	else
 		*bat = tsys02d_battery_ok;
 		
-	return status;
-}
-
-/**
- * \brief Enable heater
- *
- * \return tsys02d_status : status of TSYS02D
- *       - tsys02d_status_ok : I2C transfer completed successfully
- *       - tsys02d_status_i2c_transfer_error : Problem with i2c transfer
- *       - tsys02d_status_no_i2c_acknowledge : I2C did not acknowledge
- */
-enum tsys02d_status tsys02d_enable_heater(void)
-{
-	enum tsys02d_status status;
-	uint8_t reg_value;
-	
-	status = tsys02d_read_user_register(&reg_value);
-	if( status != tsys02d_status_ok )
-		return status;
-	
-	// Clear the resolution bits
-	reg_value |= TSYS02D_USER_REG_ONCHIP_HEATER_ENABLE;
-	
-	status = tsys02d_write_user_register(reg_value);
-
-	return status;
-}
-
-/**
- * \brief Disable heater
- *
- * \return tsys02d_status : status of TSYS02D
- *       - tsys02d_status_ok : I2C transfer completed successfully
- *       - tsys02d_status_i2c_transfer_error : Problem with i2c transfer
- *       - tsys02d_status_no_i2c_acknowledge : I2C did not acknowledge
- */
-enum tsys02d_status tsys02d_disable_heater(void)
-{
-	enum tsys02d_status status;
-	uint8_t reg_value;
-	
-	status = tsys02d_read_user_register(&reg_value);
-	if( status != tsys02d_status_ok )
-		return status;
-	
-	// Clear the resolution bits
-	reg_value &= ~TSYS02D_USER_REG_ONCHIP_HEATER_ENABLE;
-	
-	status = tsys02d_write_user_register(reg_value);
-
-	return status;
-}
-
-/**
- * \brief Get heater status
- *
- * \param[in] tsys02d_heater_status* : Return heater status (above or below 2.5V)
- *	                    - tsys02d_heater_off,
- *                      - tsys02d_heater_on
- *
- * \return tsys02d_status : status of TSYS02D
- *       - tsys02d_status_ok : I2C transfer completed successfully
- *       - tsys02d_status_i2c_transfer_error : Problem with i2c transfer
- *       - tsys02d_status_no_i2c_acknowledge : I2C did not acknowledge
- */
-enum tsys02d_status tsys02d_get_heater_status(enum tsys02d_heater_status *heater)
-{
-	enum tsys02d_status status;
-	uint8_t reg_value;
-	
-	status = tsys02d_read_user_register(&reg_value);
-	if( status != tsys02d_status_ok )
-		return status;
-	
-	// Get the heater enable bit in reg_value
-	if( reg_value & TSYS02D_USER_REG_ONCHIP_HEATER_ENABLE)
-		*heater = tsys02d_heater_on;
-	else
-		*heater = tsys02d_heater_off;
-	
 	return status;
 }
 
