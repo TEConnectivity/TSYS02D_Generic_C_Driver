@@ -40,11 +40,6 @@ enum tsys02d_battery_status {
 	tsys02d_battery_low
 };
 
-enum tsys02d_heater_status {
-	tsys02d_heater_off,
-	tsys02d_heater_on
-};
-
 // Functions
 
 /**
@@ -131,39 +126,5 @@ enum tsys02d_status tsys02d_read_temperature(float *);
  *       - tsys02d_status_no_i2c_acknowledge : I2C did not acknowledge
  */
 enum tsys02d_status tsys02d_get_battery_status(enum tsys02d_battery_status*);
-
-/**
- * \brief Enable heater
- *
- * \return tsys02d_status : status of TSYS02D
- *       - tsys02d_status_ok : I2C transfer completed successfully
- *       - tsys02d_status_i2c_transfer_error : Problem with i2c transfer
- *       - tsys02d_status_no_i2c_acknowledge : I2C did not acknowledge
- */
-enum tsys02d_status tsys02d_enable_heater(void);
-
-/**
- * \brief Disable heater
- *
- * \return tsys02d_status : status of TSYS02D
- *       - tsys02d_status_ok : I2C transfer completed successfully
- *       - tsys02d_status_i2c_transfer_error : Problem with i2c transfer
- *       - tsys02d_status_no_i2c_acknowledge : I2C did not acknowledge
- */
-enum tsys02d_status tsys02d_disable_heater(void);
-
-/**
- * \brief Get heater status
- *
- * \param[in] tsys02d_heater_status* : Return heater status (above or below 2.5V)
- *	                    - tsys02d_heater_off,
- *                      - tsys02d_heater_on
- *
- * \return tsys02d_status : status of TSYS02D
- *       - tsys02d_status_ok : I2C transfer completed successfully
- *       - tsys02d_status_i2c_transfer_error : Problem with i2c transfer
- *       - tsys02d_status_no_i2c_acknowledge : I2C did not acknowledge
- */
-enum tsys02d_status tsys02d_get_heater_status(enum tsys02d_heater_status*);
 
 #endif /* TSYS02D_H_INCLUDED */
